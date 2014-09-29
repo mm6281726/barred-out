@@ -16,7 +16,7 @@ void setup(){
   in = minim.getLineIn();
   for(int i = 0; i < cols; i++){
     for(int j = 0; j < rows; j++){
-      grid[i][j] = new Cell(i*(width/cols),j*(height/rows), i);
+      grid[i][j] = new Cell(i,j);
     }
   }
 }
@@ -43,21 +43,19 @@ class Cell {
  float x,y;
  float w,h;
  float angle;
- float rand1;
- float rand2;
- float rand3;
+ float rand1,rand2,rand3;
  int position;
 
- Cell(float tempX, float tempY, int tempP){
-   x = tempX;
-   y = tempY;
+ Cell(int tempX, int tempY){   
    w = width/cols;
    h = height/rows;
-   position = tempP;
+   x = tempX*w;
+   y = tempY*h;
+   position = tempX;
    if(!isOuterColumn()){
-     angle = (position%2==0 || position == 0)?position:-position;
+     angle = position%2==0?2*y:-2*y;
    }else{
-     angle = position == 0?1*random(255):-position*random(255);
+     angle = position==0?1*random(255):-position*random(255);
    }
    rand1 = random(255);
    rand2 = random(255);
@@ -72,18 +70,18 @@ class Cell {
   float sinangle = sin(angle)*127;
   float gain = in.left.level()*100;
   if(gain < 1.2){
-     if(isOuterColumn() && sinangle == 0){
+     if(isOuterColumn()){
        rand1 = random(255);
        rand2 = random(255);
        rand3 = random(255);
      }
-//     if(!isOuterColumn()){
-//       stroke(rand1+sinangle, rand2+sinangle, rand3+sinangle);
-//       fill(rand1+sinangle, rand2+sinangle, rand3+sinangle);
-//     }else{
+     if(!isOuterColumn() && gain > 1.0){
+       stroke(rand1+sinangle, rand2+sinangle, rand3+sinangle);
+       fill(rand1+sinangle, rand2+sinangle, rand3+sinangle);
+     }else{
        stroke(127+sinangle);
        fill(127+sinangle);
-//     }
+     }
    }else{
      if(!isOuterColumn()){
        rand1 = random(255);
@@ -93,9 +91,7 @@ class Cell {
      stroke(rand1+sinangle, rand2+sinangle, rand3+sinangle);
      fill(rand1+sinangle, rand2+sinangle, rand3+sinangle);
    }
-   pushMatrix();
    rect(x,y,w,h);
-   popMatrix();
  }
  
  boolean isOuterColumn(){
