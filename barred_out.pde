@@ -16,7 +16,7 @@ void setup(){
   in = minim.getLineIn();
   for(int i = 0; i < cols; i++){
     for(int j = 0; j < rows; j++){
-      grid[i][j] = new Cell(i*(width/cols),j*(height/rows), j);
+      grid[i][j] = new Cell(i*(width/cols),j*(height/rows), i);
     }
   }
 }
@@ -55,9 +55,9 @@ class Cell {
    h = height/rows;
    position = tempP;
    if(!isOuterColumn()){
-     angle = position%2==0?position:-position;
+     angle = (position%2==0 || position == 0)?position:-position;
    }else{
-     angle = position%2==0?position*random(255):-position*random(255);
+     angle = position == 0?1*random(255):-position*random(255);
    }
    rand1 = random(255);
    rand2 = random(255);
@@ -81,8 +81,8 @@ class Cell {
 //       stroke(rand1+sinangle, rand2+sinangle, rand3+sinangle);
 //       fill(rand1+sinangle, rand2+sinangle, rand3+sinangle);
 //     }else{
-       stroke(127+127*sinangle);
-       fill(127+127*sinangle);
+       stroke(127+sinangle);
+       fill(127+sinangle);
 //     }
    }else{
      if(!isOuterColumn()){
