@@ -7,6 +7,7 @@ Cell[][] grid;
 
 int cols = 6;
 int rows = 100;
+float sensitivity = 3.6;
 
 void setup(){
   size(displayWidth,displayHeight);
@@ -69,13 +70,13 @@ class Cell {
  void display(){
   float sinangle = sin(angle)*127;
   float gain = in.left.level()*100;
-  if(gain < 1.2){
+  if(gain < sensitivity/(cols/2)){
      if(isOuterColumn()){
        rand1 = random(255);
        rand2 = random(255);
        rand3 = random(255);
      }
-     if(!isOuterColumn() && gain > 1.0){
+     if(gain >= (sensitivity/(cols/2))/getOffset()){
        stroke(rand1+sinangle, rand2+sinangle, rand3+sinangle);
        fill(rand1+sinangle, rand2+sinangle, rand3+sinangle);
      }else{
@@ -83,10 +84,12 @@ class Cell {
        fill(127+sinangle);
      }
    }else{
-     if(!isOuterColumn()){
+     if(!isOuterColumn() && gain > sensitivity/getOffset()){
        rand1 = random(255);
        rand2 = random(255);
        rand3 = random(255);
+     }else if(gain >= 3.6){
+      
      } 
      stroke(rand1+sinangle, rand2+sinangle, rand3+sinangle);
      fill(rand1+sinangle, rand2+sinangle, rand3+sinangle);
@@ -99,6 +102,14 @@ class Cell {
      return true;
    }else{
      return false;
+   }
+ }
+ 
+ float getOffset(){
+   if(position < cols/2){
+     return cols/2-position;
+   }else{
+     return position%cols/2; 
    }
  }
 }
