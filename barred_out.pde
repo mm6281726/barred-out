@@ -8,6 +8,7 @@ Cell[][] grid;
 int cols = 6;
 int rows = 100;
 float sensitivity = 3.6;
+float sensitivityDepth = cols/2;
 
 void setup(){
   size(displayWidth,displayHeight);
@@ -32,12 +33,68 @@ void draw(){
   }
 }
 
-void stop()
-{
+void stop(){
   // always close Minim audio classes when you are done with them
   in.close();
   minim.stop(); 
   super.stop();
+}
+
+void keyReleased(){
+  float divisor = float(cols)/20;
+  if(key == 'r'){
+    rows++;
+    grid = new Cell[cols][rows];
+    for(int i = 0; i < cols; i++){
+      for(int j = 0; j < rows; j++){
+        grid[i][j] = new Cell(i,j);
+      }
+    }
+  }
+  else if(key == 'R'){
+    rows--;
+    grid = new Cell[cols][rows];
+    for(int i = 0; i < cols; i++){
+      for(int j = 0; j < rows; j++){
+        grid[i][j] = new Cell(i,j);
+      }
+    }
+  }else if(key == 'c'){
+    cols+=2;
+    grid = new Cell[cols][rows];
+    for(int i = 0; i < cols; i++){
+      for(int j = 0; j < rows; j++){
+        grid[i][j] = new Cell(i,j);
+      }
+    }
+  }else if(key == 'C'){
+    cols-=2;
+    grid = new Cell[cols][rows];
+    for(int i = 0; i < cols; i++){
+      for(int j = 0; j < rows; j++){
+        grid[i][j] = new Cell(i,j);
+      }
+    }
+  }
+  else if(key == 's'){
+    sensitivity+=divisor;    
+  }
+  else if(key == 'S'){
+    sensitivity-=divisor;
+    if(sensitivity <= 0){
+      sensitivity = 0;
+    }
+    println(sensitivity);
+  }
+  else if(key == 'd'){
+    sensitivityDepth+=divisor;
+  }
+  else if(key == 'D'){
+    sensitivityDepth-=divisor;
+    if(sensitivityDepth <= 0){
+      sensitivityDepth = 0;
+    }
+  }
 }
 
 class Cell {
@@ -70,13 +127,13 @@ class Cell {
  void display(){
   float sinangle = sin(angle)*127;
   float gain = in.left.level()*100;
-  if(gain < sensitivity/(cols/2)){
+  if(gain < sensitivity/sensitivityDepth){
      if(isOuterColumn()){
        rand1 = random(255);
        rand2 = random(255);
        rand3 = random(255);
      }
-     if(gain >= (sensitivity/(cols/2))/getOffset()){
+     if(gain >= (sensitivity/sensitivityDepth)/getOffset()){
        stroke(rand1+sinangle, rand2+sinangle, rand3+sinangle);
        fill(rand1+sinangle, rand2+sinangle, rand3+sinangle);
      }else{
