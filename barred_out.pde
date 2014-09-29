@@ -1,4 +1,7 @@
-//Copyright (c) 2014 Michael Madden
+/*******
+/* Copyright (c) 2014 Michael Madden
+/* barred_out
+/******/
 
 import ddf.minim.*;
 
@@ -16,7 +19,6 @@ void setup(){
   size(displayWidth,displayHeight);
   grid = new Cell[cols][rows];
   minim = new Minim(this);
-  // get a line in from Minim, default bit depth is 16
   in = minim.getLineIn();
   for(int i = 0; i < cols; i++){
     for(int j = 0; j < rows; j++){
@@ -36,7 +38,6 @@ void draw(){
 }
 
 void stop(){
-  // always close Minim audio classes when you are done with them
   in.close();
   minim.stop(); 
   super.stop();
@@ -46,37 +47,17 @@ void keyReleased(){
   float divisor = float(cols)/20;
   if(key == 'r'){
     rows++;
-    grid = new Cell[cols][rows];
-    for(int i = 0; i < cols; i++){
-      for(int j = 0; j < rows; j++){
-        grid[i][j] = new Cell(i,j);
-      }
-    }
+    recalibrateGrid();
   }
   else if(key == 'R'){
     rows--;
-    grid = new Cell[cols][rows];
-    for(int i = 0; i < cols; i++){
-      for(int j = 0; j < rows; j++){
-        grid[i][j] = new Cell(i,j);
-      }
-    }
+    recalibrateGrid();
   }else if(key == 'c'){
     cols+=2;
-    grid = new Cell[cols][rows];
-    for(int i = 0; i < cols; i++){
-      for(int j = 0; j < rows; j++){
-        grid[i][j] = new Cell(i,j);
-      }
-    }
+    recalibrateGrid();
   }else if(key == 'C'){
     cols-=2;
-    grid = new Cell[cols][rows];
-    for(int i = 0; i < cols; i++){
-      for(int j = 0; j < rows; j++){
-        grid[i][j] = new Cell(i,j);
-      }
-    }
+    recalibrateGrid();
   }
   else if(key == 's'){
     sensitivity+=divisor;    
@@ -88,14 +69,23 @@ void keyReleased(){
     }
   }
   else if(key == 'd'){
-    sensitivityDepth+=divisor;
+    sensitivityDepth-=divisor;
   }
   else if(key == 'D'){
-    sensitivityDepth-=divisor;
+    sensitivityDepth+=divisor;
     if(sensitivityDepth <= 0){
       sensitivityDepth = 0;
     }
   }
+}
+
+void recalibrateGrid(){
+  grid = new Cell[cols][rows];
+    for(int i = 0; i < cols; i++){
+      for(int j = 0; j < rows; j++){
+        grid[i][j] = new Cell(i,j);
+      }
+    }
 }
 
 class Cell {
@@ -167,7 +157,7 @@ class Cell {
    if(position < cols/2){
      return cols/2-position;
    }else{
-     return position%cols/2; 
+     return position%(cols/2)+1; 
    }
  }
 }
