@@ -1,3 +1,5 @@
+//Copyright (c) 2014 Michael Madden
+
 import ddf.minim.*;
 
 Minim minim;
@@ -84,7 +86,6 @@ void keyReleased(){
     if(sensitivity <= 0){
       sensitivity = 0;
     }
-    println(sensitivity);
   }
   else if(key == 'd'){
     sensitivityDepth+=divisor;
