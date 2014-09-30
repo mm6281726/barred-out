@@ -11,46 +11,70 @@ AudioInput in;
 PImage img;
 
 Cell[][] grid;
+float[] diff;
 
 int cols = 6;
 int rows = 100;
 float sensitivity = 3.6;
 float sensitivityDepth = cols/2;
+float threshold = 10;
+boolean useImage = false;
 
 void setup(){
   size(displayWidth,displayHeight);
-  grid = new Cell[cols][rows];
+  background(0);  
   minim = new Minim(this);
   in = minim.getLineIn();
-  img = loadImage("thing.jpg");
+  grid = new Cell[cols][rows];   
   for(int i = 0; i < cols; i++){
     for(int j = 0; j < rows; j++){
       grid[i][j] = new Cell(i,j);
     }
   }
+  setupImage();
 }
 
-void draw(){
-  background(0);
+void setupImage(){
+  diff = new float[width*height];
+  img = loadImage("thing.jpg");
+  img.loadPixels();
+  float difference;
+  int loc, imgLoc, imgLeftLoc;
+  for (int x = 1; x < width; x++) {
+    for (int y = 0; y < height; y++) {
+      loc = x + y*width;
+      imgLoc = x + y*img.width;
+      imgLeftLoc = (x-1) + y*img.width;
+      difference = abs(brightness(img.pixels[imgLoc]) - brightness(img.pixels[imgLeftLoc]));
+      diff[loc] = difference;
+    }
+  }
+}
+
+void draw(){  
   for(int i = 0; i < cols; i++){
     for(int j = 0 ; j < rows; j++){
       grid[i][j].oscillate();
       grid[i][j].display();
     }
   }
-  loadPixels();
-  img.loadPixels();
-  for (int y = 0; y < height; y++) {
-    for (int x = 0; x < width; x++) {
-      int loc = x + y*width;
-      float r = red(pixels[loc]);
-      float g = green(pixels[loc]);
-      float b = blue(pixels[loc]);
-      img.pixels[loc] =  color(r,g,b);          
+  if(useImage){
+    loadPixels();
+    color c;
+    int loc;
+    for (int x = 1; x < width; x++) {
+      for (int y = 0; y < height; y++) {
+        loc = x + y*width;
+        if(diff[loc] > threshold){
+          c = color(0);                 
+        }else{
+          c = pixels[loc];
+        }
+        pixels[loc] = c;
+      }
     }
+    updatePixels();
   }
-  updatePixels();
-  image(img, 0, 0);
 }
 
 void stop(){
@@ -60,7 +84,7 @@ void stop(){
 }
 
 void keyReleased(){
-  float divisor = float(cols)/20;
+  float divisor = float(cols)/20.0;
   if(key == 'r'){
     rows++;
     recalibrateGrid();
@@ -73,24 +97,26 @@ void keyReleased(){
   }else if(key == 'C'){
     cols-=2;
     recalibrateGrid();
-  }
-  else if(key == 's'){
+  }else if(key == 's'){
     sensitivity+=divisor;    
-  }
-  else if(key == 'S'){
+  }else if(key == 'S'){
     sensitivity-=divisor;
     if(sensitivity <= 0){
       sensitivity = 0;
     }
-  }
-  else if(key == 'd'){
+  }else if(key == 'd'){
     sensitivityDepth-=divisor;
-  }
-  else if(key == 'D'){
+  }else if(key == 'D'){
     sensitivityDepth+=divisor;
     if(sensitivityDepth <= 0){
       sensitivityDepth = 0;
     }
+  }else if(key == 't'){
+    threshold++;
+  }else if(key == 'T'){
+    threshold--;
+  }else if(key == 'i'){
+    useImage = !useImage;
   }
 }
 
