@@ -13,8 +13,8 @@ float sensitivityDepth = cols/2.0;
 
 String[] images;
 float[] diff;
-float threshold = 210.0;
-float thresholdAngle = 0.0;
+float threshold = 215.0;
+float thresholdAngle = 1.0;
 float thresholdSpeed = 0.005;
 PImage img;
 int useImage = 0;
@@ -38,8 +38,8 @@ void setup(){
 
 void setupImage(){
   diff = new float[width*height];
-//  img = loadImage("spacething.jpg");
-  img = loadImage("swordkid.jpg");
+  img = loadImage("nsfw4.png");
+  img.resize(width, height);
   img.loadPixels();
   int loc, imgLoc;
   for (int x = 0; x < width; x++) {
@@ -49,7 +49,9 @@ void setupImage(){
       if(x == 0 || x == width-1 || y == 0 || y == height-1){
         diff[loc] = 255.0;
       }else{
-        diff[loc] = brightness(img.pixels[imgLoc]);
+        if(imgLoc < img.pixels.length){
+          diff[loc] = brightness(img.pixels[imgLoc]);
+        }
       }
     }
   }
@@ -63,33 +65,37 @@ void draw(){
     }
   }
   if(useImage > 0){
-    float currentThreshold;
-    if(useImage == 2){
-      oscillateThreshold();
-      currentThreshold = threshold*sin(thresholdAngle)+45;
-      if(currentThreshold < 0){
-        currentThreshold*=-1;
-      }
-    }else{
-      currentThreshold = threshold-75;
-    }
-    
-    loadPixels();
-    color c;
-    int loc;
-    for (int x = 0; x < width; x++) {
-      for (int y = 0; y < height; y++) {
-        loc = x + y*width;
-        if(diff[loc] > currentThreshold){
-          c = color(0);                 
-        }else{
-          c = pixels[loc];
-        }
-        pixels[loc] = c;
-      }
-    }
-    updatePixels();
+    drawWithImage();
   }
+}
+
+void drawWithImage(){
+  float currentThreshold;
+  if(useImage == 2){
+    oscillateThreshold();
+    currentThreshold = threshold*sin(thresholdAngle);
+    if(currentThreshold < 100){
+      thresholdSpeed*=-1;
+    }
+  }else{
+    currentThreshold = threshold-75;
+  }
+  
+  loadPixels();
+  color c;
+  int loc;
+  for (int x = 0; x < width; x++) {
+    for (int y = 0; y < height; y++) {
+      loc = x + y*width;
+      if(diff[loc] > currentThreshold){
+        c = color(0);                 
+      }else{
+        c = pixels[loc];
+      }
+      pixels[loc] = c;
+    }
+  }
+  updatePixels();
 }
 
 void oscillateThreshold(){
@@ -140,17 +146,17 @@ void keyReleased(){
       useImage = 0;
     }
   }else if(key == 'u'){
-    thresholdSpeed-=0.005;
+    thresholdSpeed/=2.0;
   }else if(key == 'U'){
-    thresholdSpeed+=0.005;
+    thresholdSpeed*=2.0;
   }
 }
 
 void recalibrateGrid(){
   grid = new Cell[cols][rows];
-    for(int i = 0; i < cols; i++){
-      for(int j = 0; j < rows; j++){
-        grid[i][j] = new Cell(i,j);
-      }
+  for(int i = 0; i < cols; i++){
+    for(int j = 0; j < rows; j++){
+      grid[i][j] = new Cell(i,j);
     }
+  }
 }
