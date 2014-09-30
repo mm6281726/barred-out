@@ -8,8 +8,6 @@ import ddf.minim.*;
 Minim minim;
 AudioInput in;
 
-PImage img;
-
 Cell[][] grid;
 
 int cols = 6;
@@ -18,11 +16,10 @@ float sensitivity = 3.6;
 float sensitivityDepth = cols/2;
 
 void setup(){
-  size(displayWidth/2,displayHeight/2);
+  size(displayWidth,displayHeight);
   grid = new Cell[cols][rows];
   minim = new Minim(this);
   in = minim.getLineIn();
-  img = loadImage("thing.jpg");
   for(int i = 0; i < cols; i++){
     for(int j = 0; j < rows; j++){
       grid[i][j] = new Cell(i,j);
@@ -38,8 +35,6 @@ void draw(){
       grid[i][j].display();
     }
   }
-  loadPixels();
-  img.loadPixels();
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
       int loc = x + y*width;
@@ -49,8 +44,6 @@ void draw(){
       img.pixels[loc] =  color(r,g,b);          
     }
   }
-  updatePixels();
-  image(img, 0, 0);
 }
 
 void stop(){
