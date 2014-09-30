@@ -64,7 +64,7 @@ void draw(){
     float currentThreshold;
     if(useImage == 2){
       oscillateThreshold();
-      currentThreshold = threshold*sin(thresholdAngle))+45;
+      currentThreshold = (threshold*sin(thresholdAngle))+45;
     }else{
       currentThreshold = threshold-75;
     }
@@ -75,7 +75,7 @@ void draw(){
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
         loc = x + y*width;
-        if(diff[loc] > currentThreshold)){
+        if(diff[loc] > currentThreshold){
           c = color(0);                 
         }else{
           c = pixels[loc];
