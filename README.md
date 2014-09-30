@@ -1,5 +1,5 @@
 # Barred Out
-# /* Copyright (c) 2014 Michael Madden */
+###### /* Copyright (c) 2014 Michael Madden */
 ```
 * c - increase # of columns
 * C - decrease # of columns
