@@ -5,20 +5,20 @@
 
 import ddf.minim.*;
 
-Minim minim;
-AudioInput in;
-
-PImage img;
-
 Cell[][] grid;
-float[] diff;
-
 int cols = 6;
 int rows = 100;
 float sensitivity = 3.6;
-float sensitivityDepth = cols/2;
-float threshold = 10;
-boolean useImage = false;
+float sensitivityDepth = cols/2.0;
+
+float[] diff;
+float threshold = 210.0;
+float thresholdAngle = 0.0;
+PImage img;
+int useImage = 0;
+
+Minim minim;
+AudioInput in;
 
 void setup(){
   size(displayWidth,displayHeight);
@@ -36,35 +36,46 @@ void setup(){
 
 void setupImage(){
   diff = new float[width*height];
-  img = loadImage("thing.jpg");
+//  img = loadImage("spacething.jpg");
+  img = loadImage("swordkid.jpg");
   img.loadPixels();
-  int loc, imgLoc, imgLeftLoc;
+  int loc, imgLoc;
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
       loc = x + y*width;
       imgLoc = x + y*img.width;
-      imgLeftLoc = (x-1) + y*img.width;      
-//      diff[loc] = abs(brightness(img.pixels[imgLoc]) - brightness(img.pixels[imgLeftLoc]));;
-      diff[loc] = brightness(img.pixels[imgLoc]);
+      if(x == 0 || x == width-1 || y == 0 || y == height-1){
+        diff[loc] = 255.0;
+      }else{
+        diff[loc] = brightness(img.pixels[imgLoc]);
+      }
     }
   }
 }
 
-void draw(){  
+void draw(){
   for(int i = 0; i < cols; i++){
     for(int j = 0 ; j < rows; j++){
       grid[i][j].oscillate();
       grid[i][j].display();
     }
   }
-  if(useImage){
+  if(useImage > 0){
+    float currentThreshold;
+    if(useImage == 2){
+      oscillateThreshold();
+      currentThreshold = threshold*sin(thresholdAngle))+45;
+    }else{
+      currentThreshold = threshold-75;
+    }
+    
     loadPixels();
     color c;
     int loc;
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
         loc = x + y*width;
-        if(diff[loc] > threshold){
+        if(diff[loc] > currentThreshold)){
           c = color(0);                 
         }else{
           c = pixels[loc];
@@ -74,6 +85,10 @@ void draw(){
     }
     updatePixels();
   }
+}
+
+void oscillateThreshold(){
+  thresholdAngle+=0.005;
 }
 
 void stop(){
@@ -115,7 +130,10 @@ void keyReleased(){
   }else if(key == 'T'){
     threshold--;
   }else if(key == 'i'){
-    useImage = !useImage;
+    useImage++;
+    if(useImage > 2){
+      useImage = 0;
+    }
   }
 }
 
