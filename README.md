@@ -9,4 +9,9 @@
 * S - decrease microphone gain sensitivity
 * d - increase sensitivity depth
 * D - decrease sensitivity depth
+* t - increase image threshold
+* T - descrease image threshold
+* i x 0 - no image
+* i x 1 - static image
+* i x 2 - image modulation
 ```
