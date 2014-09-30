@@ -11,9 +11,11 @@ int rows = 100;
 float sensitivity = 3.6;
 float sensitivityDepth = cols/2.0;
 
+String[] images;
 float[] diff;
 float threshold = 210.0;
 float thresholdAngle = 0.0;
+float thresholdSpeed = 0.005;
 PImage img;
 int useImage = 0;
 
@@ -64,7 +66,10 @@ void draw(){
     float currentThreshold;
     if(useImage == 2){
       oscillateThreshold();
-      currentThreshold = (threshold*sin(thresholdAngle))+45;
+      currentThreshold = threshold*sin(thresholdAngle)+45;
+      if(currentThreshold < 0){
+        currentThreshold*=-1;
+      }
     }else{
       currentThreshold = threshold-75;
     }
@@ -88,7 +93,7 @@ void draw(){
 }
 
 void oscillateThreshold(){
-  thresholdAngle+=0.005;
+  thresholdAngle+=thresholdSpeed;
 }
 
 void stop(){
@@ -126,14 +131,18 @@ void keyReleased(){
       sensitivityDepth = 0;
     }
   }else if(key == 't'){
-    threshold++;
+    threshold+=5.0;
   }else if(key == 'T'){
-    threshold--;
+    threshold-=5.0;
   }else if(key == 'i'){
     useImage++;
     if(useImage > 2){
       useImage = 0;
     }
+  }else if(key == 'u'){
+    thresholdSpeed-=0.005;
+  }else if(key == 'U'){
+    thresholdSpeed+=0.005;
   }
 }
 
@@ -144,80 +153,4 @@ void recalibrateGrid(){
         grid[i][j] = new Cell(i,j);
       }
     }
-}
-
-class Cell {
- float x,y;
- float w,h;
- float angle;
- float rand1,rand2,rand3;
- int position;
-
- Cell(int tempX, int tempY){   
-   w = width/cols;
-   h = height/rows;
-   x = tempX*w;
-   y = tempY*h;
-   position = tempX;
-   if(!isOuterColumn()){
-     angle = position%2==0?2*y:-2*y;
-   }else{
-     angle = position==0?1*random(255):-position*random(255);
-   }
-   rand1 = random(255);
-   rand2 = random(255);
-   rand3 = random(255);
- }
- 
- void oscillate(){
-   angle += 0.02;   
- }
- 
- void display(){
-  float sinangle = sin(angle)*127;
-  float gain = in.left.level()*100;
-  if(gain < sensitivity/sensitivityDepth){
-     if(isOuterColumn()){
-       rand1 = random(255);
-       rand2 = random(255);
-       rand3 = random(255);
-     }
-     if(gain >= (sensitivity/sensitivityDepth)/getOffset()){
-       stroke(rand1+sinangle, rand2+sinangle, rand3+sinangle);
-       fill(rand1+sinangle, rand2+sinangle, rand3+sinangle);
-     }else{
-       stroke(127+sinangle);
-       fill(127+sinangle);
-     }
-   }else{
-     if(!isOuterColumn() && gain > sensitivity/getOffset()){
-       rand1 = random(255);
-       rand2 = random(255);
-       rand3 = random(255);
-     }else if(gain >= sensitivity){
-       rand1 = random(255);
-       rand2 = random(255);
-       rand3 = random(255);
-     } 
-     stroke(rand1+sinangle, rand2+sinangle, rand3+sinangle);
-     fill(rand1+sinangle, rand2+sinangle, rand3+sinangle);
-   }
-   rect(x,y,w,h);
- }
- 
- boolean isOuterColumn(){
-   if(position <= 0 || position == cols-1){
-     return true;
-   }else{
-     return false;
-   }
- }
- 
- float getOffset(){
-   if(position < cols/2){
-     return cols/2-position;
-   }else{
-     return position%(cols/2)+1; 
-   }
- }
 }
