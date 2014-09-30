@@ -38,15 +38,14 @@ void setupImage(){
   diff = new float[width*height];
   img = loadImage("thing.jpg");
   img.loadPixels();
-  float difference;
   int loc, imgLoc, imgLeftLoc;
-  for (int x = 1; x < width; x++) {
+  for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
       loc = x + y*width;
       imgLoc = x + y*img.width;
-      imgLeftLoc = (x-1) + y*img.width;
-      difference = abs(brightness(img.pixels[imgLoc]) - brightness(img.pixels[imgLeftLoc]));
-      diff[loc] = difference;
+      imgLeftLoc = (x-1) + y*img.width;      
+//      diff[loc] = abs(brightness(img.pixels[imgLoc]) - brightness(img.pixels[imgLeftLoc]));;
+      diff[loc] = brightness(img.pixels[imgLoc]);
     }
   }
 }
@@ -62,7 +61,7 @@ void draw(){
     loadPixels();
     color c;
     int loc;
-    for (int x = 1; x < width; x++) {
+    for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
         loc = x + y*width;
         if(diff[loc] > threshold){
