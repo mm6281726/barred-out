@@ -12,6 +12,7 @@
 * i x 0 - no image
 * i x 1 - static image
 * i x 2 - image modulation
+* I - invert image shading
 * t - increase image threshold
 * T - descrease image threshold
 * u - increase image modulation speed
