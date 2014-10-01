@@ -16,6 +16,7 @@ float[] diff;
 float threshold = 215.0;
 float thresholdAngle = 1.0;
 float thresholdSpeed = 0.005;
+boolean reverseShading = false;
 PImage img;
 int useImage = 0;
 
@@ -88,9 +89,9 @@ void drawWithImage(){
     for (int y = 0; y < height; y++) {
       loc = x + y*width;
       if(diff[loc] > currentThreshold){
-        c = color(0);                 
+        c = reverseShading ? pixels[loc] : color(0);
       }else{
-        c = pixels[loc];
+        c = reverseShading ? color(0) : pixels[loc];
       }
       pixels[loc] = c;
     }
@@ -145,6 +146,8 @@ void keyReleased(){
     if(useImage > 2){
       useImage = 0;
     }
+  }else if(key == 'I'){
+    reverseShading = !reverseShading;
   }else if(key == 'u'){
     thresholdSpeed/=2.0;
   }else if(key == 'U'){
