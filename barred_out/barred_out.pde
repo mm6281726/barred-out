@@ -19,6 +19,7 @@ float thresholdSpeed = 0.005;
 boolean reverseShading = false;
 PImage img;
 int useImage = 0;
+int border = 1;
 
 Minim minim;
 AudioInput in;
@@ -47,7 +48,7 @@ void setupImage(){
     for (int y = 0; y < height; y++) {
       loc = x + y*width;
       imgLoc = x + y*img.width;
-      if(x == 0 || x == width-1 || y == 0 || y == height-1){
+      if(x < border || x > width-border || y < border || y > height-border){
         diff[loc] = 255.0;
       }else{
         if(imgLoc < img.pixels.length){
@@ -116,12 +117,18 @@ void keyReleased(){
     recalibrateGrid();
   }else if(key == 'R'){
     rows--;
+    if(rows < 0){
+      rows = 0;
+    }
     recalibrateGrid();
   }else if(key == 'c'){
     cols+=2;
     recalibrateGrid();
   }else if(key == 'C'){
     cols-=2;
+    if(cols < 0){
+      cols = 0;
+    }
     recalibrateGrid();
   }else if(key == 's'){
     sensitivity+=divisor;    
