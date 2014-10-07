@@ -10,6 +10,7 @@ int cols = 6;
 int rows = 100;
 float sensitivity = 3.6;
 float sensitivityDepth = cols/2.0;
+float oscillateSpeed = 0.02;
 
 String[] images;
 float[] diff;
@@ -40,7 +41,7 @@ void setup(){
 
 void setupImage(){
   diff = new float[width*height];
-  img = loadImage("nsfw4.png");
+  img = loadImage("recursive3.png");
   img.resize(width, height);
   img.loadPixels();
   int loc, imgLoc;
@@ -159,6 +160,10 @@ void keyReleased(){
     thresholdSpeed/=2.0;
   }else if(key == 'U'){
     thresholdSpeed*=2.0;
+  }else if(key == 'o'){
+    oscillateSpeed+=0.02;
+  }else if(key == 'O'){
+    oscillateSpeed-=0.02;
   }
 }
 

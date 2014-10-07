@@ -22,7 +22,7 @@ class Cell {
  }
  
  void oscillate(){
-   angle += 0.02;   
+   angle += oscillateSpeed;   
  }
  
  void display(){

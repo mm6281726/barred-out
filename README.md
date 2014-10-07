@@ -5,6 +5,8 @@
 * C - decrease # of columns
 * r - increase # of rows
 * R - decrease # of rows
+* o - increase oscillation speed
+* O - descrease oscillation speed
 * s - increase microphone gain sensitivity
 * S - decrease microphone gain sensitivity
 * d - increase sensitivity depth
