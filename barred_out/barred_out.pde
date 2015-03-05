@@ -12,7 +12,8 @@ float sensitivity = 3.6;
 float sensitivityDepth = cols/2.0;
 float oscillateSpeed = 0.02;
 
-String[] images;
+String[] images = {"swordkid.jpg", "nsfw1.png", "nsfw2.png", "nsfw4.png"};
+int image = 0;
 float[] diff;
 float threshold = 215.0;
 float thresholdAngle = 1.0;
@@ -41,7 +42,7 @@ void setup(){
 
 void setupImage(){
   diff = new float[width*height];
-  img = loadImage("recursive3.png");
+  img = loadImage(images[image]);
   img.resize(width, height);
   img.loadPixels();
   int loc, imgLoc;
@@ -164,6 +165,13 @@ void keyReleased(){
     oscillateSpeed+=0.02;
   }else if(key == 'O'){
     oscillateSpeed-=0.02;
+  }else if(key == 'p'){
+    if(image >= images.length){
+      image = 0;
+    }else{
+      image++;
+    }
+    setupImage();
   }
 }
 

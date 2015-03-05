@@ -18,5 +18,6 @@
 * t - increase image threshold
 * T - descrease image threshold
 * u - increase image modulation speed
-* U - descrease image modulation speed
+* U - decrease image modulation speed
+* p - change image
 ```
