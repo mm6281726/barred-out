@@ -166,11 +166,12 @@ void keyReleased(){
   }else if(key == 'O'){
     oscillateSpeed-=0.02;
   }else if(key == 'p'){
-    if(image >= images.length){
+    if(image > images.length-2){
       image = 0;
     }else{
       image++;
     }
+    img = null;
     setupImage();
   }
 }
