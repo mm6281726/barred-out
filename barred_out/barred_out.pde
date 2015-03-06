@@ -12,7 +12,7 @@ float sensitivity = 3.6;
 float sensitivityDepth = cols/2.0;
 float oscillateSpeed = 0.02;
 
-String[] images = {"swordkid.jpg", "nsfw1.png", "nsfw2.png", "nsfw4.png"};
+String[] images = {"swordkid.jpg", "nsfw1.png", "nsfw2.png", "nsfw4.png", "fuckin elvis1.png"};
 int image = 0;
 float[] diff;
 float threshold = 215.0;
@@ -173,6 +173,16 @@ void keyReleased(){
     }
     img = null;
     setupImage();
+  }else if(key == '?'){
+    cols = 6;
+    rows = 100;
+    sensitivity = 3.6;
+    sensitivityDepth = cols/2.0;
+    oscillateSpeed = 0.02;
+    threshold = 215.0;
+    thresholdAngle = 1.0;
+    thresholdSpeed = 0.005;
+    recalibrateGrid();
   }
 }
 
