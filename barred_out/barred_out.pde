@@ -12,7 +12,7 @@ float sensitivity = 3.6;
 float sensitivityDepth = cols/2.0;
 float oscillateSpeed = 0.02;
 
-String[] images = {"swordkid.jpg", "nsfw1.png", "nsfw2.png", "nsfw4.png", "fuckin elvis1.png"};
+String[] images = {"gl3.jpg", "gl2.jpg", "nsfw4.png", "nsfw1.png", "fuckin elvis1.png", "pentagram.png", "matches.jpg", "etmj.jpg", "kraken.jpg", "jump.jpg", "baphomet.png", "logo1.jpg", "gl1.jpg", "swordkid.jpg", "nsfw2.png"};
 int image = 0;
 float[] diff;
 float threshold = 215.0;
@@ -119,8 +119,8 @@ void keyReleased(){
     recalibrateGrid();
   }else if(key == 'R'){
     rows--;
-    if(rows < 0){
-      rows = 0;
+    if(rows < 1){
+      rows = 1;
     }
     recalibrateGrid();
   }else if(key == 'c'){
@@ -128,8 +128,8 @@ void keyReleased(){
     recalibrateGrid();
   }else if(key == 'C'){
     cols-=2;
-    if(cols < 0){
-      cols = 0;
+    if(cols < 2){
+      cols = 2;
     }
     recalibrateGrid();
   }else if(key == 's'){
@@ -166,10 +166,16 @@ void keyReleased(){
   }else if(key == 'O'){
     oscillateSpeed-=0.02;
   }else if(key == 'p'){
-    if(image > images.length-2){
+    image++;
+    if(image > images.length-1){
       image = 0;
-    }else{
-      image++;
+    }
+    img = null;
+    setupImage();
+  }else if(key == 'P'){
+    image--;
+    if(image < 0){
+      image = images.length-1;
     }
     img = null;
     setupImage();
@@ -182,6 +188,11 @@ void keyReleased(){
     threshold = 215.0;
     thresholdAngle = 1.0;
     thresholdSpeed = 0.005;
+    recalibrateGrid();
+  }
+  else if(key == '1'){
+    cols = 2;
+    rows = 1;
     recalibrateGrid();
   }
 }

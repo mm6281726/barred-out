@@ -20,4 +20,5 @@
 * u - increase image modulation speed
 * U - decrease image modulation speed
 * p - change image
+* ? - reset
 ```

@@ -51,8 +51,8 @@ class Cell {
        rand2 = random(255);
        rand3 = random(255);
      } 
-     stroke(rand1+sinangle, rand2+sinangle, rand3+sinangle);
-     fill(rand1+sinangle, rand2+sinangle, rand3+sinangle);
+     stroke(rand1+sinangle-50, rand2+sinangle-50, rand3+sinangle-50);
+     fill(rand1+sinangle-50, rand2+sinangle-50, rand3+sinangle-50);
    }
    rect(x,y,w,h);
  }
