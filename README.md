@@ -11,6 +11,7 @@
 * S - decrease microphone gain sensitivity
 * d - increase sensitivity depth
 * D - decrease sensitivity depth
+* z - toggle color craziness
 * i x 0 - no image
 * i x 1 - static image
 * i x 2 - image modulation
