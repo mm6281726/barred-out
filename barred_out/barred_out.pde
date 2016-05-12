@@ -12,16 +12,14 @@ float sensitivity = 3.6;
 float sensitivityDepth = cols/2.0;
 float oscillateSpeed = 0.02;
 
-//String[] images = {"gl3.jpg", "gl2.jpg", "nsfw4.png", "nsfw1.png", "fuckin elvis1.png", "pentagram.png", "matches.jpg", "etmj.jpg", "kraken.jpg", "jump.jpg", "baphomet.png", "logo1.jpg", "gl1.jpg", "swordkid.jpg", "nsfw2.png"};
-String[] images = {"gl3.jpg", "gl2.jpg", "pentagram.png", "logo1.jpg"};
+String[] images = {"gl3.jpg", "gl2.jpg", "nsfw4.png", "nsfw1.png", "fuckin elvis1.png", "pentagram.png", "matches.jpg", "etmj.jpg", "kraken.jpg", "jump.jpg", "baphomet.png", "logo1.jpg", "gl1.jpg", "swordkid.jpg", "nsfw2.png"};
 int image = 0;
 //float[] diff;
-PVector[] diff;
+color[] diff;
 float threshold = 215.0;
 float thresholdAngle = 1.0;
 float thresholdSpeed = 0.005;
 boolean reverseShading = false;
-boolean colorCrazy = true;
 PImage img;
 int useImage = 0;
 int border = 1;
@@ -45,7 +43,7 @@ void setup(){
 
 void setupImage(){
   //diff = new float[width*height];
-  diff = new PVector[width*height];
+  diff = new color[width*height];
   img = loadImage(images[image]);
   img.resize(width, height);
   img.loadPixels();
@@ -56,16 +54,11 @@ void setupImage(){
       imgLoc = x + y*img.width;
       if(x < border || x > width-border || y < border || y > height-border){
         //diff[loc] = 255.0;
-        diff[loc].x = 255.0;
-        diff[loc].y = 255.0;
-        diff[loc].z = 255.0;
+        diff[loc] = color(255.0);
       }else{
         if(imgLoc < img.pixels.length){
           //diff[loc] = brightness(img.pixels[imgLoc]);
-          float r = red(img.pixels[imgLoc]);
-          float g = green(img.pixels[imgLoc]);;
-          float b = blue(img.pixels[imgLoc]);;
-          diff[loc] = new PVector(r, g, b);
+          diff[loc] = img.pixels[imgLoc];
         }
       }
     }
@@ -109,7 +102,7 @@ void drawWithImage(){
       //  c = reverseShading ? color(0) : pixels[loc];
       //}
       
-      color imgPx = color(diff[loc].x, diff[loc].y, diff[loc].z);
+      color imgPx = diff[loc];
       if(brightness(imgPx) > currentThreshold){
         c = reverseShading ? pixels[loc] : imgPx;
       }else{
@@ -209,12 +202,11 @@ void keyReleased(){
     thresholdAngle = 1.0;
     thresholdSpeed = 0.005;
     recalibrateGrid();
-  }else if(key == '1'){
+  }
+  else if(key == '1'){
     cols = 2;
     rows = 1;
     recalibrateGrid();
-  }else if(key == 'z'){
-    colorCrazy = !colorCrazy;
   }
 }
 
