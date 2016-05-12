@@ -12,7 +12,8 @@ float sensitivity = 3.6;
 float sensitivityDepth = cols/2.0;
 float oscillateSpeed = 0.02;
 
-String[] images = {"gl3.jpg", "gl2.jpg", "nsfw4.png", "nsfw1.png", "fuckin elvis1.png", "pentagram.png", "matches.jpg", "etmj.jpg", "kraken.jpg", "jump.jpg", "baphomet.png", "logo1.jpg", "gl1.jpg", "swordkid.jpg", "nsfw2.png"};
+//String[] images = {"gl3.jpg", "gl2.jpg", "nsfw4.png", "nsfw1.png", "fuckin elvis1.png", "pentagram.png", "matches.jpg", "etmj.jpg", "kraken.jpg", "jump.jpg", "baphomet.png", "logo1.jpg", "gl1.jpg", "swordkid.jpg", "nsfw2.png"};
+String[] images = {"gl3.jpg", "gl2.jpg", "pentagram.png", "logo1.jpg"};
 int image = 0;
 //float[] diff;
 PVector[] diff;
@@ -20,6 +21,7 @@ float threshold = 215.0;
 float thresholdAngle = 1.0;
 float thresholdSpeed = 0.005;
 boolean reverseShading = false;
+boolean colorCrazy = true;
 PImage img;
 int useImage = 0;
 int border = 1;
@@ -207,11 +209,12 @@ void keyReleased(){
     thresholdAngle = 1.0;
     thresholdSpeed = 0.005;
     recalibrateGrid();
-  }
-  else if(key == '1'){
+  }else if(key == '1'){
     cols = 2;
     rows = 1;
     recalibrateGrid();
+  }else if(key == 'z'){
+    colorCrazy = !colorCrazy;
   }
 }
 
