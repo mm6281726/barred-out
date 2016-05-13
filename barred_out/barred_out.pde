@@ -47,6 +47,7 @@ void setup(){
 void setupImage(){
   diff1 = new float[width*height];
   diff2 = new color[width*height];
+  
   img = loadImage(images[image]);
   img.resize(width, height);
   img.loadPixels();
@@ -106,6 +107,7 @@ void drawWithImage(){
       }else{
         c = reverseShading ? imgPx : pixels[loc];
       }
+      
       pixels[loc] = c;
     }
   }
@@ -199,7 +201,8 @@ void keyReleased(){
     thresholdAngle = 1.0;
     thresholdSpeed = 0.005;
     recalibrateGrid();
-  }else if(key == '1'){
+  }
+  else if(key == '1'){
     cols = 2;
     rows = 1;
     recalibrateGrid();

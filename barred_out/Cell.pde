@@ -42,11 +42,11 @@ class Cell {
        fill(127+sinangle);
      }
    }else{
-     if(!isOuterColumn() && gain > sensitivity/getOffset() && colorCrazy){
+     if(!isOuterColumn() && gain > sensitivity/getOffset()){
        rand1 = random(255);
        rand2 = random(255);
        rand3 = random(255);
-     }else if(gain >= sensitivity && colorCrazy){
+     }else if(gain >= sensitivity){
        rand1 = random(255);
        rand2 = random(255);
        rand3 = random(255);
