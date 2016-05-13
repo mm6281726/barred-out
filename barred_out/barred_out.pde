@@ -12,15 +12,17 @@ float sensitivity = 3.6;
 float sensitivityDepth = cols/2.0;
 float oscillateSpeed = 0.02;
 
-//String[] images = {"gl3.jpg", "gl2.jpg", "nsfw4.png", "nsfw1.png", "fuckin elvis1.png", "pentagram.png", "matches.jpg", "etmj.jpg", "kraken.jpg", "jump.jpg", "baphomet.png", "logo1.jpg", "gl1.jpg", "swordkid.jpg", "nsfw2.png"};
-String[] images = {"gl3.jpg", "gl2.jpg", "pentagram.png", "logo1.jpg"};
+String[] images = {"gl3.jpg", "gl2.jpg", "nsfw4.png", "nsfw1.png", "fuckin elvis1.png", "pentagram.png", "matches.jpg", "etmj.jpg", "kraken.jpg", "jump.jpg", "baphomet.png", "logo1.jpg", "gl1.jpg", "swordkid.jpg", "nsfw2.png", "bowie1.jpg", "bowie2.jpg", "bowie3.jpg", "bowie4.jpg", "bowie5.jpg", "gl3.jpg", "gl2.jpg", "pentagram.png", "logo1.jpg"};
+//String[] images = {"bowie1.jpg", "bowie2.jpg", "bowie3.jpg", "bowie4.jpg", "bowie5.jpg", "gl3.jpg", "gl2.jpg", "pentagram.png", "logo1.jpg"};
 int image = 0;
-float[] diff;
+float[] diff1;
+color[] diff2;
 float threshold = 215.0;
 float thresholdAngle = 1.0;
 float thresholdSpeed = 0.005;
 boolean reverseShading = false;
 boolean colorCrazy = true;
+boolean colorMode = false;
 PImage img;
 int useImage = 0;
 int border = 1;
@@ -43,7 +45,8 @@ void setup(){
 }
 
 void setupImage(){
-  diff = new float[width*height];
+  diff1 = new float[width*height];
+  diff2 = new color[width*height];
   img = loadImage(images[image]);
   img.resize(width, height);
   img.loadPixels();
@@ -53,10 +56,12 @@ void setupImage(){
       loc = x + y*width;
       imgLoc = x + y*img.width;
       if(x < border || x > width-border || y < border || y > height-border){
-        diff[loc] = 255.0;
+        diff1[loc] = 255.0;
+        diff2[loc] = color(255.0, 255.0, 255.0);
       }else{
         if(imgLoc < img.pixels.length){
-          diff[loc] = brightness(img.pixels[imgLoc]);
+          diff1[loc] = brightness(img.pixels[imgLoc]);
+          diff2[loc] = img.pixels[imgLoc];
         }
       }
     }
@@ -93,10 +98,13 @@ void drawWithImage(){
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
       loc = x + y*width;
-      if(diff[loc] > currentThreshold){
-        c = reverseShading ? pixels[loc] : color(0);
+      
+      color imgPx = colorMode ? diff2[loc] : color(0);
+      
+      if(diff1[loc] > currentThreshold){
+        c = reverseShading ? pixels[loc] : imgPx;
       }else{
-        c = reverseShading ? color(0) : pixels[loc];
+        c = reverseShading ? imgPx : pixels[loc];
       }
       pixels[loc] = c;
     }
@@ -197,6 +205,8 @@ void keyReleased(){
     recalibrateGrid();
   }else if(key == 'z'){
     colorCrazy = !colorCrazy;
+  }else if(key == '!'){
+    colorMode = !colorMode;
   }
 }
 
